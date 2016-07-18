@@ -54,9 +54,22 @@ var Brolog = (function() {
   defaultLevel('INFO')
   level(DEFAULT_LEVEL)
 
-  function Brolog(level) {
-    if (typeof level !== 'undefined') {
-      defaultLevel(level)
+  /**
+   *
+   * Don't put param in Brolog constructor,
+   * in order to make Brolog work as a Angular Service.
+   * If the constructor has any params,
+   * Angular DI system will throw error,
+   * because there's no provider for the params.
+   *
+   */
+  function Brolog() {
+    /**
+     * to make angular dependency injection happy
+     * we get params from arguments
+     */
+    if (arguments.length && typeof arguments[0] !== 'undefined') {
+      defaultLevel(arguments[0])
     }
     /**
      *
@@ -205,13 +218,13 @@ var Brolog = (function() {
 
 }())
 
+  // module.exports = Brolog.default = Brolog.Brolog = Brolog
+  Brolog.default = Brolog.Brolog = Brolog
+
   // Expose Brolog, even in AMD and CommonJS for browser emulators
   if (!noGlobal) {
     window.Brolog = Brolog
   }
-
-  // module.exports = Brolog.default = Brolog.Brolog = Brolog
-  Brolog.default = Brolog.Brolog = Brolog
 
   return Brolog
 
